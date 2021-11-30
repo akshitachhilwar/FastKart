@@ -22,6 +22,7 @@ import {
 } from './reducers/productReducers';
 import {
   userAddressMapReducer,
+
   userDeleteReducer,
   userDetailsReducer,
   userListReducer,
@@ -69,7 +70,7 @@ const reducer = combineReducers({
   orderDeliver: orderDeliverReducer,
   userList: userListReducer,
   userDelete: userDeleteReducer,
-  userTopSellersList: userTopSellerListReducer,
+  userTopSellersLisst: userTopSellerListReducer,
   productCategoryList: productCategoryListReducer,
   productReviewCreate: productReviewCreateReducer,
   userAddressMap: userAddressMapReducer,

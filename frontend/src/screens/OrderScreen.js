@@ -1,5 +1,6 @@
 import Axios from 'axios';
 import { PayPalButton } from 'react-paypal-button-v2';
+import { useParams } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -12,7 +13,8 @@ import {
 } from '../constants/orderConstants';
 
 export default function OrderScreen(props) {
-  const orderId = props.match.params.id;
+  const params = useParams();
+  const { id: orderId } = params;
   const [sdkReady, setSdkReady] = useState(false);
   const orderDetails = useSelector((state) => state.orderDetails);
   const { order, loading, error } = orderDetails;
@@ -83,7 +85,7 @@ export default function OrderScreen(props) {
           <ul>
             <li>
               <div className="card card-body">
-                <h2>Shippring</h2>
+                <h2>Shipping</h2>
                 <p>
                   <strong>Name:</strong> {order.shippingAddress.fullName} <br />
                   <strong>Address: </strong> {order.shippingAddress.address},
@@ -136,7 +138,7 @@ export default function OrderScreen(props) {
                         </div>
 
                         <div>
-                          {item.qty} x ${item.price} = ${item.qty * item.price}
+                          {item.qty} x Rs.{item.price} = Rs.{item.qty * item.price}
                         </div>
                       </div>
                     </li>
@@ -155,19 +157,19 @@ export default function OrderScreen(props) {
               <li>
                 <div className="row">
                   <div>Items</div>
-                  <div>${order.itemsPrice.toFixed(2)}</div>
+                  <div>Rs.{order.itemsPrice.toFixed(2)}</div>
                 </div>
               </li>
               <li>
                 <div className="row">
                   <div>Shipping</div>
-                  <div>${order.shippingPrice.toFixed(2)}</div>
+                  <div>Rs.{order.shippingPrice.toFixed(2)}</div>
                 </div>
               </li>
               <li>
                 <div className="row">
                   <div>Tax</div>
-                  <div>${order.taxPrice.toFixed(2)}</div>
+                  <div>Rs.{order.taxPrice.toFixed(2)}</div>
                 </div>
               </li>
               <li>
@@ -176,7 +178,7 @@ export default function OrderScreen(props) {
                     <strong> Order Total</strong>
                   </div>
                   <div>
-                    <strong>${order.totalPrice.toFixed(2)}</strong>
+                    <strong>Rs.{order.totalPrice.toFixed(2)}</strong>
                   </div>
                 </div>
               </li>

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { createOrder } from '../actions/orderActions';
 import CheckoutSteps from '../components/CheckoutSteps';
 import { ORDER_CREATE_RESET } from '../constants/orderConstants';
@@ -8,10 +8,12 @@ import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 
 export default function PlaceOrderScreen(props) {
+  const navigate = useNavigate();
   const cart = useSelector((state) => state.cart);
   if (!cart.paymentMethod) {
-    props.history.push('/payment');
-  }
+    navigate('/payment');
+
+    }
   const orderCreate = useSelector((state) => state.orderCreate);
   const { loading, success, error, order } = orderCreate;
   const toPrice = (num) => Number(num.toFixed(2)); // 5.123 => "5.12" => 5.12
@@ -27,10 +29,10 @@ export default function PlaceOrderScreen(props) {
   };
   useEffect(() => {
     if (success) {
-      props.history.push(`/order/${order._id}`);
+      navigate(`/order/${order._id}`);
       dispatch({ type: ORDER_CREATE_RESET });
     }
-  }, [dispatch, order, props.history, success]);
+  }, [dispatch, order, navigate, success]);
   return (
     <div>
       <CheckoutSteps step1 step2 step3 step4></CheckoutSteps>
@@ -77,7 +79,7 @@ export default function PlaceOrderScreen(props) {
                         </div>
 
                         <div>
-                          {item.qty} x ${item.price} = ${item.qty * item.price}
+                          {item.qty} x Rs.{item.price} = Rs.{item.qty * item.price}
                         </div>
                       </div>
                     </li>
@@ -96,19 +98,19 @@ export default function PlaceOrderScreen(props) {
               <li>
                 <div className="row">
                   <div>Items</div>
-                  <div>${cart.itemsPrice.toFixed(2)}</div>
+                  <div>Rs.{cart.itemsPrice.toFixed(2)}</div>
                 </div>
               </li>
               <li>
                 <div className="row">
                   <div>Shipping</div>
-                  <div>${cart.shippingPrice.toFixed(2)}</div>
+                  <div>Rs.{cart.shippingPrice.toFixed(2)}</div>
                 </div>
               </li>
               <li>
                 <div className="row">
                   <div>Tax</div>
-                  <div>${cart.taxPrice.toFixed(2)}</div>
+                  <div>Rs.{cart.taxPrice.toFixed(2)}</div>
                 </div>
               </li>
               <li>
@@ -117,7 +119,7 @@ export default function PlaceOrderScreen(props) {
                     <strong> Order Total</strong>
                   </div>
                   <div>
-                    <strong>${cart.totalPrice.toFixed(2)}</strong>
+                    <strong>Rs.{cart.totalPrice.toFixed(2)}</strong>
                   </div>
                 </div>
               </li>

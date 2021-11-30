@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { saveShippingAddress } from '../actions/cartActions';
 import CheckoutSteps from '../components/CheckoutSteps';
 
 export default function ShippingAddressScreen(props) {
+  const navigate = useNavigate();
   const userSignin = useSelector((state) => state.userSignin);
-
   const { userInfo } = userSignin;
   const cart = useSelector((state) => state.cart);
   const { shippingAddress } = cart;
@@ -13,15 +14,18 @@ export default function ShippingAddressScreen(props) {
   const [lng, setLng] = useState(shippingAddress.lng);
   const userAddressMap = useSelector((state) => state.userAddressMap);
   const { address: addressMap } = userAddressMap;
+  
 
   if (!userInfo) {
-    props.history.push('/signin');
+    navigate('/signin');
   }
-  const [fullName, setFullName] = useState(shippingAddress.fullName);
-  const [address, setAddress] = useState(shippingAddress.address);
-  const [city, setCity] = useState(shippingAddress.city);
-  const [postalCode, setPostalCode] = useState(shippingAddress.postalCode);
-  const [country, setCountry] = useState(shippingAddress.country);
+  const [fullName, setFullName] = useState(shippingAddress.fullName || '');
+  const [address, setAddress] = useState(shippingAddress.address || '');
+  const [city, setCity] = useState(shippingAddress.city || '');
+  const [postalCode, setPostalCode] = useState(
+    shippingAddress.postalCode || ''
+  );
+  const [country, setCountry] = useState(shippingAddress.country || '');
   const dispatch = useDispatch();
   const submitHandler = (e) => {
     e.preventDefault();
@@ -49,7 +53,7 @@ export default function ShippingAddressScreen(props) {
           lng: newLng,
         })
       );
-      props.history.push('/payment');
+      navigate('/payment');
     }
   };
   const chooseOnMap = () => {
@@ -64,8 +68,10 @@ export default function ShippingAddressScreen(props) {
         lng,
       })
     );
-    props.history.push('/map');
+    navigate('/map');
+
   };
+
   return (
     <div>
       <CheckoutSteps step1 step2></CheckoutSteps>
@@ -83,6 +89,12 @@ export default function ShippingAddressScreen(props) {
             onChange={(e) => setFullName(e.target.value)}
             required
           ></input>
+        </div>
+        <div>
+          <label htmlFor="chooseOnMap">Location</label>
+          <button type="button" onClick={chooseOnMap}>
+            Choose On Map
+          </button>
         </div>
         <div>
           <label htmlFor="address">Address</label>
@@ -114,8 +126,7 @@ export default function ShippingAddressScreen(props) {
             placeholder="Enter postal code"
             value={postalCode}
             onChange={(e) => setPostalCode(e.target.value)}
-            required
-          ></input>
+            required></input>
         </div>
         <div>
           <label htmlFor="country">Country</label>
@@ -128,12 +139,7 @@ export default function ShippingAddressScreen(props) {
             required
           ></input>
         </div>
-        <div>
-          <label htmlFor="chooseOnMap">Location</label>
-          <button type="button" onClick={chooseOnMap}>
-            Choose On Map
-          </button>
-        </div>
+        
         <div>
           <label />
           <button className="primary" type="submit">
